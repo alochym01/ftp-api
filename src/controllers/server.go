@@ -34,7 +34,7 @@ func ServerCreate(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
 	server := models.Server{}
-	errs := db.Scopes(IsActive).Where("domain = ? AND port = ?", s.Domain, s.Port).First(&server)
+	errs := db.Where("domain = ? AND port = ?", s.Domain, s.Port).First(&server)
 
 	if errs != nil {
 		// for _, e := range errs.GetErrors() {
@@ -43,7 +43,7 @@ func ServerCreate(c *gin.Context) {
 		if gorm.IsRecordNotFoundError(errs.Error) {
 			server := models.Server{Domain: s.Domain, Port: s.Port}
 			db.Create(&server)
-			// check server is first row of server table
+			// check server is first record of server table
 			if server.ID == 1 {
 				server.Active = 1
 				db.Save(&server)

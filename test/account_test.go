@@ -3,7 +3,6 @@ package test
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -57,7 +56,6 @@ func TestAccount(t *testing.T) {
 		// assert.True(t, exists)
 		// compare value
 		assert.Equal(t, "Account is created", value)
-		fmt.Println(response)
 	})
 
 	t.Run("Check Account", func(t *testing.T) {
