@@ -9,8 +9,14 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// AccountInput validate request
-type AccountInput struct {
+// AccountCreateInput validate request
+type AccountCreateInput struct {
+	Username string `form:"username" binding:"required"`
+	Password string `form:"password" binding:"required"`
+}
+
+// AccountCcheckInput validate request
+type AccountCheckInput struct {
 	Username string `form:"username" binding:"required"`
 	Password string `form:"password"`
 	Mode     string `form:"mode"`
@@ -24,7 +30,7 @@ func IsActive(db *gorm.DB) *gorm.DB {
 
 // AccountCreate create an account
 func AccountCreate(c *gin.Context) {
-	var temp AccountInput
+	var temp AccountCreateInput
 
 	err := c.Bind(&temp)
 	if err != nil {
@@ -78,9 +84,9 @@ func AccountCreate(c *gin.Context) {
 
 // AccountDelete delete an account
 func AccountDelete(c *gin.Context) {
-	var temp AccountInput
+	var temp AccountCreateInput
 
-	err := c.Bind(&temp)
+	err := c.ShouldBind(&temp)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "missing username/password",
@@ -121,9 +127,9 @@ func AccountDelete(c *gin.Context) {
 
 // AccountCheck check an account w user/pass and active
 func AccountCheck(c *gin.Context) {
-	var temp AccountInput
+	var temp AccountCheckInput
 
-	err := c.Bind(&temp)
+	err := c.ShouldBind(&temp)
 	if err != nil {
 		c.String(http.StatusForbidden, "Username/Password is missing")
 		return

@@ -58,9 +58,29 @@ func TestAccount(t *testing.T) {
 		assert.Equal(t, "Account is created", value)
 	})
 
-	t.Run("Check Account", func(t *testing.T) {
+	t.Run("Check Account PAM_SM_AUTH", func(t *testing.T) {
 		// prepare a request
 		params := []byte(`username=alochym1&password=password&do=login&mode=PAM_SM_AUTH`)
+		req, _ := http.NewRequest("POST", "/account/check", bytes.NewBuffer(params))
+
+		// prepare request headers
+		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+
+		// create recording response
+		res := httptest.NewRecorder()
+
+		router.ServeHTTP(res, req)
+
+		// compare response status code
+		assert.Equal(t, http.StatusOK, res.Code)
+
+		// compare value
+		assert.Equal(t, "OK", res.Body.String())
+	})
+
+	t.Run("Check Account PAM_SM_ACC", func(t *testing.T) {
+		// prepare a request
+		params := []byte(`username=alochym1&password=password&do=login&mode=PAM_SM_ACC`)
 		req, _ := http.NewRequest("POST", "/account/check", bytes.NewBuffer(params))
 
 		// prepare request headers
