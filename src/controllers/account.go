@@ -12,7 +12,9 @@ import (
 // AccountInput validate request
 type AccountInput struct {
 	Username string `form:"username" binding:"required"`
-	Password string `form:"password" binding:"required"`
+	Password string `form:"password"`
+	Mode     string `form:"mode"`
+	Do       string `form:"do"`
 }
 
 // IsActive method chaining using gorm scope
@@ -137,10 +139,12 @@ func AccountCheck(c *gin.Context) {
 		return
 	}
 
-	// https://www.digitalocean.com/community/tutorials/understanding-boolean-logic-in-go
-	if !models.CheckPasswordHash(temp.Password, acc.Password) {
-		c.String(http.StatusForbidden, "Password is wrong")
-		return
+	if temp.Mode == "PAM_SM_AUTH" {
+		if !models.CheckPasswordHash(temp.Password, acc.Password) {
+			// https://www.digitalocean.com/community/tutorials/understanding-boolean-logic-in-go
+			c.String(http.StatusForbidden, "Password is wrong")
+			return
+		}
 	}
 
 	c.String(http.StatusOK, "OK")

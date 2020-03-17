@@ -2,6 +2,8 @@ package src
 
 import (
 	"fmt"
+	"io"
+	"os"
 
 	"github.com/alochym01/ftp-api/src/controllers"
 	"github.com/alochym01/ftp-api/src/models"
@@ -17,6 +19,9 @@ func InitRouter() *gin.Engine {
 	if err != nil {
 		panic("Failed to connect to database!")
 	}
+
+	f, _ := os.Create("gin.log")
+	gin.DefaultWriter = io.MultiWriter(f)
 
 	// Create table using GORM
 	db.AutoMigrate(&models.Account{}, &models.Server{})

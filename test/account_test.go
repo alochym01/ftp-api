@@ -60,7 +60,7 @@ func TestAccount(t *testing.T) {
 
 	t.Run("Check Account", func(t *testing.T) {
 		// prepare a request
-		params := []byte(`username=alochym1&password=password`)
+		params := []byte(`username=alochym1&password=password&do=login&mode=PAM_SM_AUTH`)
 		req, _ := http.NewRequest("POST", "/account/check", bytes.NewBuffer(params))
 
 		// prepare request headers

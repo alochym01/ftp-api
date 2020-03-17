@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/alochym01/ftp-api/src/models"
@@ -19,13 +18,13 @@ type ServerInfo struct {
 func ServerCreate(c *gin.Context) {
 	var s ServerInfo
 
-	err := c.Bind(&s)
+	err := c.ShouldBind(&s)
 
 	if err != nil {
-		fmt.Println("cannot bind request object")
 		c.JSON(http.StatusBadRequest, gin.H{
 			"result":  false,
-			"message": "missing username/password",
+			"message": "missing domain/port",
+			"error":   err.Error(),
 		})
 		return
 	}
