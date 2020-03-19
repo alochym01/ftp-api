@@ -7,8 +7,8 @@ import (
 // Account table
 type Account struct {
 	ID       uint   `gorm:"primary_key" json:"id" form:"id"`
-	Username string `gorm:"unique;index" json:"username" form:"username"`
-	Password string `json:"password" form:"password"`
+	Username string `gorm:"not null;unique;index" json:"username" form:"username"`
+	Password string `gorm:"not null" json:"password" form:"password"`
 	Active   uint   `gorm:"default:1"`
 }
 

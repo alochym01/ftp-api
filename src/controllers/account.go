@@ -32,7 +32,7 @@ func IsActive(db *gorm.DB) *gorm.DB {
 func AccountCreate(c *gin.Context) {
 	var temp AccountCreateInput
 
-	err := c.Bind(&temp)
+	err := c.ShouldBind(&temp)
 	if err != nil {
 		fmt.Println("cannot bind request object")
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -102,7 +102,7 @@ func AccountDelete(c *gin.Context) {
 	// db.Scopes(IsActive).Where("username = ? AND password = ?", temp.Username, hashpassword).Delete(models.Account{})
 	err = db.Scopes(IsActive).Where("username = ?", temp.Username).First(&acc).Error
 	if gorm.IsRecordNotFoundError(err) {
-		c.JSON(http.StatusBadRequest, gin.H{
+		c.JSON(http.StatusOK, gin.H{
 			"message": "Username is wrong",
 			"result":  false,
 		})
@@ -111,7 +111,7 @@ func AccountDelete(c *gin.Context) {
 
 	// https://www.digitalocean.com/community/tutorials/understanding-boolean-logic-in-go
 	if !models.CheckPasswordHash(temp.Password, acc.Password) {
-		c.JSON(http.StatusBadRequest, gin.H{
+		c.JSON(http.StatusOK, gin.H{
 			"message": "Password is wrong",
 			"result":  false,
 		})

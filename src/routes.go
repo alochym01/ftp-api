@@ -1,7 +1,6 @@
 package src
 
 import (
-	"fmt"
 	"io"
 	"os"
 
@@ -36,8 +35,8 @@ func InitRouter() *gin.Engine {
 	})
 
 	// fmt.Println(gin.Mode())
-	// gin.SetMode(gin.ReleaseMode)
-	fmt.Println(gin.Mode())
+	gin.SetMode(gin.ReleaseMode)
+	// fmt.Println(gin.Mode())
 
 	// Home controller
 	r.GET("/", controllers.Home)
